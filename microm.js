@@ -13,6 +13,7 @@ class Microm {
     this.recordRTC = null;
     this.player = null;
     this.mp3 = null;
+    this.stream = null;
     this.eventListeners = {};
     this.converter = new Converter();
   }
@@ -34,6 +35,7 @@ class Microm {
   stopRecording() {
     var self = this;
     this.isRecording = false;
+    this.stream = null;
 
     return new Promise((resolve, reject) => {
       self.recordRTC.stopRecording(() => {
@@ -161,6 +163,18 @@ class Microm {
   }
 
   /**
+   * Stream returned by getUserMedia. Null if not recording.
+   *
+   * @example
+   *   console.log(microm.getStream());
+   *
+   * @return {stream}
+   */
+  getStream() {
+    return this.stream;
+  }
+
+  /**
    * Forces file download.
    * 
    * @param  {String} fileName 
@@ -184,7 +198,7 @@ class Microm {
       
     this.recordRTC = recordRTC;
     this.isRecording = true;
-
+    this.stream = stream;
     return stream;
   }
 
